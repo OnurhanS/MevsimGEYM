@@ -1,0 +1,384 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+    min-height: 100vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-x: hidden;
+}
+
+#app {
+    width: 100vw;
+    min-height: 100vh;
+    max-width: 480px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+}
+
+.screen {
+    display: none;
+    padding: 20px;
+    min-height: 100vh;
+    text-align: center;
+    color: #333;
+}
+
+.screen.active, .screen:not(.hidden) {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Başlıklar */
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    color: #333;
+}
+
+h2 {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+    color: #333;
+}
+
+/* Giriş Ekranı */
+#loginScreen h1 {
+    font-size: 3rem;
+    margin-bottom: 40px;
+}
+
+#loginScreen p {
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+#playerNameInput {
+    width: 280px;
+    max-width: 90vw;
+    padding: 15px 20px;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 25px;
+    margin-bottom: 25px;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    color: #333;
+}
+
+/* Ana Menü */
+#menuScreen h2 {
+    margin-bottom: 15px;
+}
+
+#menuScreen p {
+    font-size: 1.3rem;
+    margin-bottom: 30px;
+    color: #333;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+}
+
+/* Oyun Ekranı */
+#gameScreen h2 {
+    margin-bottom: 15px;
+    font-size: 1.5rem;
+}
+
+#gameScreen p {
+    font-size: 1.2rem;
+    margin: 15px 0;
+    color: #333;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+}
+
+/* Oyun Container */
+.game-container {
+    display: flex;
+    gap: 20px;
+    width: 100%;
+    max-width: 450px;
+    margin: 20px 0;
+}
+
+.left-panel, .right-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.left-panel h3, .right-panel h3 {
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+    color: #333;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+}
+
+.card-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+
+/* Kartlar */
+.card {
+    background: linear-gradient(145deg, #ffffff, #f8f9fa);
+    border-radius: 20px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    padding: 20px 15px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+    border: 3px solid transparent;
+    position: relative;
+    overflow: hidden;
+    color: #333;
+}
+
+.card:active {
+    transform: scale(0.95);
+}
+
+.card.dragging {
+    opacity: 0.5;
+    transform: scale(1.1);
+    z-index: 1000;
+}
+
+.card.drag-over {
+    border-color: #007bff;
+    background: linear-gradient(145deg, #e3f2fd, #bbdefb);
+    transform: scale(1.05);
+    box-shadow: 0 12px 30px rgba(0,123,255,0.3);
+}
+
+.card.selected {
+    border-color: #007bff;
+    background: linear-gradient(145deg, #e3f2fd, #bbdefb);
+    transform: scale(1.05);
+    box-shadow: 0 12px 30px rgba(0,123,255,0.3);
+    color: #007bff;
+}
+
+.card.correct {
+    border-color: #28a745;
+    background: linear-gradient(145deg, #d4edda, #c3e6cb);
+    opacity: 0.7;
+    pointer-events: none;
+    transform: scale(0.9);
+    color: #155724;
+}
+
+.card.wrong {
+    border-color: #dc3545;
+    background: linear-gradient(145deg, #f8d7da, #f5c6cb);
+    animation: shake 0.6s ease-in-out;
+    color: #721c24;
+}
+
+/* Word kartları özel stilleri */
+.word-card {
+    cursor: grab;
+}
+
+.word-card:active {
+    cursor: grabbing;
+}
+
+.word-card.correct {
+    cursor: default;
+}
+
+/* Image kartları özel stilleri */
+.image-card {
+    min-height: 100px;
+    font-size: 2rem;
+}
+
+.drop-zone {
+    border: 3px dashed #ccc;
+    background: linear-gradient(145deg, #f8f9fa, #e9ecef);
+}
+
+.drop-zone.drag-over {
+    border-color: #007bff;
+    border-style: solid;
+    background: linear-gradient(145deg, #e3f2fd, #bbdefb);
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+/* Butonlar */
+.btn {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff;
+    border: none;
+    border-radius: 30px;
+    padding: 15px 30px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+    min-width: 140px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.btn:hover {
+    background: linear-gradient(135deg, #28a745, #20c997);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+}
+
+.btn:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+/* Modal ve Panel */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.modal .modal-content {
+    background: linear-gradient(145deg, #ffffff, #f8f9fa);
+    border-radius: 25px;
+    padding: 30px;
+    width: 100%;
+    max-width: 350px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+    text-align: center;
+    color: #333;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    h1 { font-size: 2rem; }
+    h2 { font-size: 1.5rem; }
+    
+    #loginScreen h1 { font-size: 2.5rem; }
+    
+    #playerNameInput {
+        width: 250px;
+        padding: 12px 18px;
+        font-size: 1rem;
+    }
+    
+    .game-container {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .left-panel h3, .right-panel h3 {
+        font-size: 1.1rem;
+        margin-bottom: 10px;
+    }
+    
+    .card {
+        padding: 15px 10px;
+        font-size: 1rem;
+        min-height: 70px;
+    }
+    
+    .image-card {
+        min-height: 80px;
+        font-size: 1.5rem;
+    }
+    
+    .btn {
+        padding: 12px 25px;
+        font-size: 1rem;
+        min-width: 120px;
+    }
+    
+    .modal .modal-content {
+        padding: 20px;
+        margin: 10px;
+    }
+}
+
+@media (max-width: 360px) {
+    .card {
+        padding: 12px 8px;
+        font-size: 0.9rem;
+        min-height: 60px;
+    }
+    
+    .image-card {
+        min-height: 70px;
+        font-size: 1.3rem;
+    }
+    
+    .btn {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+        min-width: 100px;
+    }
+}
+
+/* Animasyonlar */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.screen:not(.hidden) {
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* Konfeti efekti için hazırlık */
+.confetti {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    background: #ff6b6b;
+    animation: confetti-fall 3s linear infinite;
+    z-index: 1001;
+}
+
+@keyframes confetti-fall {
+    0% { transform: translateY(-100vh) rotate(0deg); }
+    100% { transform: translateY(100vh) rotate(360deg); }
+} 
